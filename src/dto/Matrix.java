@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.function.DoublePredicate;
 
 public class Matrix {
 	private int dim;
@@ -15,6 +14,44 @@ public class Matrix {
 		this.data = new double[dim][dim];
 	}
 	
+	public Matrix(int dim, double[][] data) {
+		if(data.length == dim) {
+			this.dim = dim;
+			this.data = data;			
+		}
+		else {
+			throw new ExceptionInInitializerError("Unable to construct matrix with different size and dimension.");
+		}
+	}
+	
+	public int getDimension() {
+		return dim;
+	}
+	
+	public double get(int i, int j) {
+		return data[i][j];
+	}
+	
+	public Matrix generateSubmatrix(int start_i, int start_j) {
+		int submatrixDim = this.dim - start_i;
+		double m[][] = new double[submatrixDim][submatrixDim];
+		
+		for(int i = 1; i < dim; ++i) {
+			int k = 0;
+			for(int j = 0; j < dim; ++j)
+			{
+				if(j == start_j) {
+					continue;
+				}
+				else {
+					m[i-1][k] = this.data[i][j];
+					k++;
+				}
+			}
+		}
+		
+		return new Matrix(submatrixDim, m);
+	}
 	public static Matrix generateRandomMatrix(int dim) {
 		Matrix matrix = new Matrix(dim);
 		for(int i = 0; i < dim; ++i) {
@@ -24,7 +61,6 @@ public class Matrix {
 		}
 		return matrix;
 	}
-	
 	
 	public static Matrix generateMatrixFromFile(String fileName) {
 		Matrix matrix = null;
