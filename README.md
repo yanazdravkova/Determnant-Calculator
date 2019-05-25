@@ -1,1 +1,1 @@
-Determinant-Calculator
+Matrix Determinant Calculator
