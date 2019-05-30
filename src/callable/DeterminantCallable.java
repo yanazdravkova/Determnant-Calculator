@@ -1,15 +1,15 @@
-package runnable;
-
-import com.sun.security.auth.NTDomainPrincipal;
+package callable;
 
 import dto.Matrix;
-public abstract class DeterminantRunnable {
+public abstract class DeterminantCallable {
 	protected final Matrix matrix;
-	protected final Boolean[] firstLine;
+	protected final boolean[] firstLine;
+	protected final int thread_id;
 	
-	public DeterminantRunnable(Matrix matrix, Boolean[] firstLine) {
+	public DeterminantCallable(Matrix matrix, boolean[] firstLine, int thread_id) {
 		this.matrix = matrix;
 		this.firstLine = firstLine;
+		this.thread_id = thread_id;
 	}
 	
 	public double calculate() {
@@ -17,7 +17,7 @@ public abstract class DeterminantRunnable {
 		double result = 0;
 		for(int i = 0; i < n; ++i) {
 			if(firstLine[i]) {
-				result += matrix.get(0, i) * Math.pow(-1, i + 1) * calculateDet(matrix);
+				result += matrix.get(0, i) * Math.pow(-1, 1 + i + 1) * calculateDet(matrix, i, 0);
 			}
 		}
 		
