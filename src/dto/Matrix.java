@@ -33,11 +33,7 @@ public class Matrix {
 	}
 	
 	public Matrix generateSubmatrix(int start_i, int start_j) {
-		//System.out.println("start_i " + start_i + " start_j " + start_j);
 		int submatrixDim = this.dim - 1;
-		//System.out.println("subDIM " + submatrixDim);
-		System.out.println("start_i " + start_i);
-		System.out.println("start_j " + start_j);
 		double m[][] = new double[submatrixDim][submatrixDim];
 		
 		for(int i = 1; i < dim; i++) {

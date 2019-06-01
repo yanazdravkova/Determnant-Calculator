@@ -18,7 +18,6 @@ import callable.Silent;
 
 public class Main {
 	public static void main(String[] args) {
-		System.out.println("Hello its me");
 		Options options = new Options();
 		options.addOption("n", true, "set matrix dimension");
 		options.addOption("i", true, "set input file");
@@ -35,7 +34,6 @@ public class Main {
 				int dimension = Integer.parseInt(cmd.getOptionValue("n"));
 				matrix = Matrix.generateRandomMatrix(dimension);
 			} else if (cmd.hasOption("i")) {
-				System.out.println("has i ");
 				String fileName = cmd.getOptionValue("i");
 				matrix = Matrix.generateMatrixFromFile(fileName);
 				System.out.println("matrix read from file ");
@@ -65,8 +63,6 @@ public class Main {
 	}
 
 	private static void runDet(boolean isQuiet, int numThreads, Matrix matrix) {
-		System.out.println("RUN DET PRINT");
-		//matrix.print();
 		if (matrix != null) {
 			ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(2);
 
@@ -74,8 +70,6 @@ public class Main {
 			int dim = matrix.getDimension();
 			if (isQuiet) {
 				for (int i = 0; i < numThreads; i++) {
-					// System.out.println("I: " + i);
-
 					boolean[] firstLine = new boolean[dim];
 
 					for (int j = 0; j < dim; ++j) {
@@ -93,11 +87,9 @@ public class Main {
 					Silent worker = new Silent(matrix, firstLine, i);
 
 					Future<Double> result = executor.submit(worker);
-					//System.out.println("result " + result);
 					resultList.add(result);
 				}
 				double determinant = 0;
-				//System.out.println("resultList size " + resultList.size());
 				for (Future<Double> future : resultList) {
 					try {
 						System.out
