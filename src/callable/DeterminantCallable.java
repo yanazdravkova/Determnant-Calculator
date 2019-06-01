@@ -18,7 +18,7 @@ public abstract class DeterminantCallable {
 		
 		for(int i = 0; i < n; ++i) {			
 			if(firstLine[i]) {
-				Matrix subMatrix = matrix.generateSubmatrix(0, i);
+				Matrix subMatrix = matrix.generateSubmatrix(i);
 				result += matrix.get(0, i) * Math.pow(-1, 1 + i + 1) * calculateDet(subMatrix);
 			}
 		}
@@ -40,7 +40,7 @@ public abstract class DeterminantCallable {
 		//NxN
 		else {
 			for(int i = 0; i < n; ++i) {
-				Matrix subMatrix = matrix.generateSubmatrix(0, i);
+				Matrix subMatrix = matrix.generateSubmatrix(i);
 				result += matrix.get(i, 0) * Math.pow(-1, 1 + i + 1) * calculateDet(subMatrix);
 			}
 		}

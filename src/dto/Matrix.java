@@ -32,7 +32,7 @@ public class Matrix {
 		return data[i][j];
 	}
 	
-	public Matrix generateSubmatrix(int start_i, int start_j) {
+	public Matrix generateSubmatrix(int start_j) {
 		int submatrixDim = this.dim - 1;
 		double m[][] = new double[submatrixDim][submatrixDim];
 		
