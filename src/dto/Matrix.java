@@ -33,12 +33,16 @@ public class Matrix {
 	}
 	
 	public Matrix generateSubmatrix(int start_i, int start_j) {
-		int submatrixDim = this.dim - start_i;
+		//System.out.println("start_i " + start_i + " start_j " + start_j);
+		int submatrixDim = this.dim - 1;
+		//System.out.println("subDIM " + submatrixDim);
+		System.out.println("start_i " + start_i);
+		System.out.println("start_j " + start_j);
 		double m[][] = new double[submatrixDim][submatrixDim];
 		
-		for(int i = 1; i < dim; ++i) {
+		for(int i = 1; i < dim; i++) {
 			int k = 0;
-			for(int j = 0; j < dim; ++j)
+			for(int j = 0; j < dim; j++)
 			{
 				if(j == start_j) {
 					continue;
@@ -50,7 +54,25 @@ public class Matrix {
 			}
 		}
 		
+		for(int i = 0; i < dim-1; i++ ) {
+			for (int j = 0; j < dim-1; j++) {
+				System.out.print(" m[" + i + "][" + j + "] " + m[i][j] );
+			}
+			System.out.println("*");
+		}
 		return new Matrix(submatrixDim, m);
+	}
+	
+	public void print() {
+		int n = this.dim;
+		System.out.println("***************************");
+		for(int i = 0; i < n; i++ ) {
+			for (int j = 0; j < n; j++) {
+				System.out.print(this.get(i, j) + " ");
+			}
+			System.out.println();
+		}
+		System.out.println("***************************");
 	}
 	public static Matrix generateRandomMatrix(int dim) {
 		Matrix matrix = new Matrix(dim);

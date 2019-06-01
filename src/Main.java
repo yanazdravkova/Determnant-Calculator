@@ -35,8 +35,11 @@ public class Main {
 				int dimension = Integer.parseInt(cmd.getOptionValue("n"));
 				matrix = Matrix.generateRandomMatrix(dimension);
 			} else if (cmd.hasOption("i")) {
+				System.out.println("has i ");
 				String fileName = cmd.getOptionValue("i");
 				matrix = Matrix.generateMatrixFromFile(fileName);
+				System.out.println("matrix read from file ");
+				matrix.print();
 			}
 			if (cmd.hasOption("t")) {
 				int numThreads = Integer.parseInt(cmd.getOptionValue("t"));
@@ -62,6 +65,8 @@ public class Main {
 	}
 
 	private static void runDet(boolean isQuiet, int numThreads, Matrix matrix) {
+		System.out.println("RUN DET PRINT");
+		//matrix.print();
 		if (matrix != null) {
 			ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(2);
 
@@ -69,22 +74,34 @@ public class Main {
 			int dim = matrix.getDimension();
 			if (isQuiet) {
 				for (int i = 0; i < numThreads; i++) {
-					
+					// System.out.println("I: " + i);
+
 					boolean[] firstLine = new boolean[dim];
-					for(int j = 0; j < dim; ++j) {
-						if(j%numThreads == 0) {
+
+					for (int j = 0; j < dim; ++j) {
+						 System.out.println("i: " + i + " j: " + j + " numThreads " + numThreads + 
+								 " j%numThreads " + j%numThreads);
+						if (j % numThreads == i) {
 							firstLine[j] = true;
+						}
 					}
+
+					for (int k = 0; k < dim; ++k) {
+						 System.out.println("firstline " + k + " " + firstLine[k]);
+					}
+
 					Silent worker = new Silent(matrix, firstLine, i);
 
 					Future<Double> result = executor.submit(worker);
+					//System.out.println("result " + result);
 					resultList.add(result);
 				}
 				double determinant = 0;
+				//System.out.println("resultList size " + resultList.size());
 				for (Future<Double> future : resultList) {
 					try {
-						System.out.println(
-								"Future result is - " + " - " + future.get() + "; And Task done is " + future.isDone());
+						System.out
+								.println("Future result is: " + future.get() + "; And Task done is " + future.isDone());
 						determinant += future.get();
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -94,17 +111,14 @@ public class Main {
 				// shut down the executor service now
 				executor.shutdown();
 			}
-		} else {
+			executor.shutdown();
 
+			try {
+				executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+			} catch (InterruptedException е) {
+				System.out.println();
+			}
 		}
-		executor.shutdown();
-
-		try {
-			executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
-		} catch (InterruptedException е) {
-			System.out.println();
-		}
-	}
 	}
 
 	private static void writeResultToFile(String filename, long time) {
