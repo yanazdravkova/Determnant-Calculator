@@ -64,14 +64,15 @@ public class Main {
 
 	private static void runDet(boolean isQuiet, int numThreads, Matrix matrix) {
 		if (matrix != null) {
-			ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(2);
-
-			List<Future<Double>> resultList = new ArrayList<>();
 			int dim = matrix.getDimension();
+			if(numThreads > dim) {
+				numThreads = dim;
+			}
+			ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(numThreads);
+			List<Future<Double>> resultList = new ArrayList<>();
 			if (isQuiet) {
 				for (int i = 0; i < numThreads; i++) {
 					boolean[] firstLine = new boolean[dim];
-
 					for (int j = 0; j < dim; ++j) {
 						 System.out.println("i: " + i + " j: " + j + " numThreads " + numThreads + 
 								 " j%numThreads " + j%numThreads);
@@ -79,21 +80,18 @@ public class Main {
 							firstLine[j] = true;
 						}
 					}
-
 					for (int k = 0; k < dim; ++k) {
 						 System.out.println("firstline " + k + " " + firstLine[k]);
 					}
 
 					Silent worker = new Silent(matrix, firstLine, i);
-
 					Future<Double> result = executor.submit(worker);
 					resultList.add(result);
 				}
 				double determinant = 0;
 				for (Future<Double> future : resultList) {
 					try {
-						System.out
-								.println("Future result is: " + future.get() + "; And Task done is " + future.isDone());
+						System.out.println("Future result is: " + future.get() + "; And Task done is " + future.isDone());
 						determinant += future.get();
 					} catch (Exception e) {
 						e.printStackTrace();
